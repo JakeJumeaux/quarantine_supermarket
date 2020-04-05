@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-Author: JakeJumeaux
-"""
 
 #Supermarket Process Modeller
 #The aim of this program is to model the process/throughput flow of a supermarket in a step wise fashion
@@ -53,7 +48,7 @@ class Customer:
         self.checkout_time = time_checkout 
         
     
-    def advance_step(self):
+    def advance_time(self):
         self.current_time += timestep
         self.total_time += timestep
         if self.state_index ==3 :
@@ -127,11 +122,11 @@ class Universe:
             print(person.name)
         return
     
-    def advance_step(self, steps = 1):
+    def advance_time(self, steps = 1):
         for i in range(0,steps):
             self.total_time += timestep
             for person in self.everyone:
-                person.advance_step()
+                person.advance_time()
             global till_space
             global store_space
             for line in self.queues:
@@ -183,16 +178,16 @@ universe.queues.append(Queue(2))
 
 
 
-for x in range(0,1):
-    universe.create_life(randrange(10))
-    universe.advance_step(20)
-    universe.visualise()
-        
+#for x in range(0,1):
+#    universe.create_life(randrange(10))
+#    universe.advance_time()
+#    universe.visualise()
+#        
 #debug
 #time = 0
 #for x in range(0,5):
 #    universe.create_life(5)
-#    universe.advance_step()
+#    universe.advance_time()
 #    for queue in universe.queues:
 #    print(states[queue.index])
 #    queue.print_queue()
