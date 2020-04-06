@@ -4,6 +4,7 @@
 #The aim of this program is to model the process/throughput flow of a supermarket in a step wise fashion
 
 from random import randrange
+from random import choice
 
 timestep = 0.5
 #customers_per_step = 1
@@ -18,28 +19,41 @@ first = 0
 second = 0
 #Available states
 states = ['Store Queue', 'Shopping', 'Checkout Queue', 'Checking Out', 'Left']
+girls_names = open("girls-names.txt",'r').read().split('\n')
+boys_names = open("boys-names.txt" , 'r').read().split('\n')
+surnames = open('surnames_processed.txt','r').read().split('\n')
+
 
 #Generate new customer IDs based on the previous customer's ID
-def next_customer(last):
-    if last == "ZZ":
-        next_customer = "AA"
-        return next_customer
-    for i,x in enumerate(alphabet):
-        if x == last[0]:
-            first = i
-        if x == last[1]:
-            second = i + 1
-    if second == 26:
-        first += 1
-        second = 0
-    next_customer = alphabet[first] + alphabet[second]
-    return next_customer
+def name_customer():
+    global girls_names,boys_names,surnames
+    sex = choice([0,1])
+    if sex == 0:
+        first_name = choice(boys_names)
+    else:
+        first_name = choice(girls_names)
+    name = first_name + ' ' + choice(surnames)  
+    return name, sex
+#    if last == "ZZ":
+#        name_customer = "AA"
+#        return name_customer
+#    for i,x in enumerate(alphabet):
+#        if x == last[0]:
+#            first = i
+#        if x == last[1]:
+#            second = i + 1
+#    if second == 26:
+#        first += 1
+#        second = 0
+#    name_customer = alphabet[first] + alphabet[second]
+#    return name_customer
 
 #How would people based look?
     # customer[]
 class Customer:
-    def __init__(self,name):
+    def __init__(self,name,sex):
         self.name = name
+        self.sex = sex
         self.current_time = 0
         self.total_time = 0
         self.state_index = 0
@@ -110,11 +124,10 @@ class Universe:
       
     def create_life(self,people = 1):
         for x in range(0,people):
-            global last_customer
-            next_name = next_customer(last_customer)
-            self.everyone.append(Customer(next_name))
+            #Might need to add global girlsnames, boysnames,surnames to the customer function
+            attribute = name_customer()
+            self.everyone.append(Customer(attribute[0], attribute[1]))
             self.queues[0].customers.append(self.everyone[-1])
-            last_customer = next_name
         return
     
     def roll_call(self):
@@ -178,7 +191,7 @@ universe.queues.append(Queue(2))
 
 
 
-#for x in range(0,1):
+#for x in range(0,1000):
 #    universe.create_life(randrange(10))
 #    universe.advance_time()
 #    universe.visualise()
